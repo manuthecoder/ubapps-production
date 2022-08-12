@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="main">
+        <div id="nav">
+            <div id="tabs">
+                <div class="open-tab" onclick="openTab();">
+                    <img src="./icons/HC_Icon_plus_white.svg" />
+                </div>
+            </div>
+            <div id="bar">
+                <img src="./icons/HC_Icon_channel-private_white.svg" class="first" />
+                <img src="./icons/HC_Icon_search_white.svg" class="second" />
+                <input id="omnibox" type="text" placeholder="Search with Google or enter address" onkeypress="onKeyPress(event)" onfocusout="barUnfocus();" />
+                <div id="custom">
+                    <div id="service">
+                        <img src="./icons/ultraviolet.png" />
+                        <p>Ultraviolet</p>
+                        <b>Ultraviolet</b>
+                    </div>
+                    <div id="path" onclick="editBar();">Web Browser ▸ discord.com</div>
+                </div>
+            </div>
+        </div>
+        <div id="content">
+        </div>
+        <div id="setup">
+            <p>Welcome to TabLab! In order to set up TabLab, enter a website into the box and press enter. Then you'll be able to use TabLab like normal.</p>
+            <button onclick="disableAllSetup();">I have</button>
+        </div>
+    </div>
+    <script>
+        let setupAllowed = true;
+        let globalActiveTab;
+        let brands = {
+            'ubgames:': {
+                name: "ubGames",
+                icon: "https://ubgames.web.app/favicon.png",
+                path: (path) => {
+                    if (path[0] == 'fullscreen') {
+                        return ['Fullscreen', path[1]];
+                    } else return path;
+                }
+            },
+            'ultraviolet:': {
+                name: "Ultraviolet",
+                icon: "./icons/ultraviolet.png",
+                editable: true,
+                edit: () => {
+                    
+                },
+                path: (path, url) => {
+                    return ['Browser', url.hostname + path.join('/')];
+                }
+            },
+            'tablab:': {
+                name: "TabLab",
+                icon: "./icons/tablab.png",
+                placeholder: true,
+                editable: true,
+                edit: () => {
+
+                },
+                path: (path, url) => {
+                    if (path[0] && (path[0] == 'newtab.html' || path[0] == 'newtab')) return ['Search with Google or enter address'];
+                    return path;
+                }
+            }
+        }
+        let tabs = [
+            {
+                title: 'Set Up TabLab',
+                uri: 'tablab://uvsetup',
+                active: true,
+                omnibox: ''
+            },
+            {
+                title: 'New Tab',
+                uri: 'tablab://newtab.html',
+                active: false,
+                omnibox: ''
+            }
+        ];
+        function generateIframe (tab) {
+            const id = `
+                iframe-
+                ${Math.random().toString(36).substring(3, 10)}
+                -
+                ${Date.now().toString(36)}
+                -
+                ${Math.random().toString(36).substring(3, 10)}
+            `.replace(/( |\n)/g, '');
+            const iframe = document.createElement('iframe');
+            iframe.src = uriParser(tab.uri);
+            iframe.setAttribute('id', id);
+            document.getElementById("content").appendChild(iframe);
+            return id;
+        }
+        function useBrandedBar (logo, name, path, placeholder, editable) {
+            const custom = document.querySelector('#custom');
+            if (!custom.classList.contains('enabled')) custom.classList.add('enabled');
+            if (custom.classList.contains('editable')) custom.classList.remove('editable');
+            if (custom.classList.contains('placeholder')) custom.classList.remove('placeholder');
+            if (editable) custom.classList.add('editable');
+            if (placeholder) custom.classList.add('placeholder');
+            document.querySelector('#service > img').src = logo;
+            document.querySelector('#service > b').innerText = name;
+            document.querySelector('#service > p').innerText = name;
+            document.querySelector('#path').innerText = path;
+        }
+        function disableBrandedBar () {
+            const custom = document.querySelector('#custom');
+            if (custom.classList.contains('enabled')) custom.classList.remove('enabled');
+            if (custom.classList.contains('editable')) custom.classList.remove('editable');
+            if (custom.classList.contains('placeholder')) custom.classList.remove('placeholder');
+        }
+        let isEditable = false;
+        function configureBrandedBar (tab) {
+            try {
+                uriObject = new URL(tab.uri);
+                if (uriObject.protocol == 'httpsuv:') uriObject.protocol = 'ultraviolet:';
+                if (uriObject.protocol == 'httpuv:') uriObject.protocol = 'ultraviolet:';
+                if (uriObject.protocol == 'uvhttp:') uriObject.protocol = 'ultraviolet:';
+                if (uriObject.protocol == 'uvhttps:') uriObject.protocol = 'ultraviolet:';
+                if (uriObject.protocol == 'uv:') uriObject.protocol = 'ultraviolet:';
+                if (brands[uriObject.protocol]) {
+                    let { name, icon, path, editable, placeholder } = brands[uriObject.protocol];
+                    isEditable = editable;
+                    let pathArray = path(uriObject.pathname.split('/').filter(segment => segment), uriObject);
+                    let pathString = pathArray.join(' ▸ ');
+                    if (!placeholder) tab.title = name + ' ' + pathArray[pathArray.length - 1];
+                    useBrandedBar(icon, name, pathString, placeholder, editable);
+                } else {
+                    tab.title = uriObject.hostname + uriObject.pathname.split('/').filter(segment => segment).join('/');
+                    disableBrandedBar();
+                }
+            } catch (err) {
+                let { name, icon, path, editable, placeholder } = brands['ultraviolet:'];
+                isEditable = editable;
+                tab.title = tab.uri;
+                let frameLocation = getFrameLocation();
+                if (frameLocation) useBrandedBar(icon, name, frameLocation, placeholder, editable);
+                else useBrandedBar(icon, name, 'Google Search ▸ ' + tab.uri, placeholder, editable);
+            }
+        }
+        function editBar () {
+            if (isEditable) {
+                disableBrandedBar();
+                document.querySelector('#omnibox').focus();
+            }
+        }
+        function barUnfocus () {
+            updateTabs();
+        }
+        function updateTabs () {
+            let omniboxValue = document.querySelector('#omnibox').value;
+            let previouslyActiveTab = document.querySelector('.tab.active');
+            let previousTabNumber;
+            if (previouslyActiveTab && previouslyActiveTab.id) previousTabNumber = +previouslyActiveTab.id.substring(3);
+            if ((previousTabNumber || previousTabNumber === 0) && tabs[previousTabNumber]) tabs[previousTabNumber].omnibox = omniboxValue;
+            let activeTab;
+            const tabsElement = document.querySelector('#tabs');
+            tabsElement.innerHTML = tabs.map((tab, i) => {
+                if (!tab.iframe) tab.iframe = generateIframe(tab);
+                if (tab.active) activeTab = tab;
+                if (tab.active) globalActiveTab = tab;
+                let uriObject;
+                if (tab.active) {
+                    configureBrandedBar(tab);
+                }
+                if (tab.uri === 'tablab://uvsetup' && tab.active) enableSetup();
+                if (tab.active) document.querySelector('#omnibox').value = tab.omnibox ?? '';
+                return /*html*/`
+                    <div class="tab${tab.active ? ' active' : ''}" id="tab${i}" onclick="tab(${i}, this);">
+                        <p>${tab.title}</p>
+                        <span class="tab-close" onclick="closeTab(${i}, this);">
+                            <img src="./icons/HC_Icon_view-close_white.svg" />
+                        </span>
+                    </div>
+                `;
+            }).join('') + /*html*/`
+                <div class="open-tab" onclick="openTab();">
+                    <img src="./icons/HC_Icon_plus_white.svg" />
+                </div>
+            `;
+            const contentElement = document.querySelector('#content');
+            Array(...contentElement.children).forEach(iframe => {
+                if (iframe.classList.contains('active')) iframe.classList.remove('active');
+                if (iframe.id == activeTab.iframe) iframe.classList.add('active'); 
+            });
+        }
+        function disableAllSetup () {
+            setupAllowed = false;
+            localStorage.setItem('setup', 'true');
+            disableSetup();
+        }
+        function doSetup () {
+            const div = document.createElement('div');
+            document.body.appendChild(div, document.body);
+            const styles = {
+                width: '100px',
+                height: '100px',
+                position: 'absolute',
+                top: '-100px',
+                left: '-100px',
+                padding: '0px',
+                margin: '0px',
+                overflow: 'none',
+                display: 'none'
+            };
+            for (const style in styles) {
+                div.style[style] = styles[style];
+            }
+            div.innerHTML = /*html*/`
+                <iframe src="../?dest=about:blank" style="width: 100%; height: 100%; padding: 0px; margin: 0px; border: none;" onload="disableAllSetup();"></iframe>
+            `;
+        }
+        function enableSetup () {
+            if (!setupAllowed) return;
+            document.body.classList.add('setup');
+            console.log('Show Setup');
+        }
+        function disableSetup () {
+            console.log('Hide Setup');
+            document.body.classList.remove('setup');
+        }
+        function uriParser (uri) {
+            // if (uri == 'tablab://uvsetup') {
+            //     enableSetup();
+            //     return 'https://ubapps-production.up.railway.app';
+            // }
+            let uriObject;
+            try {
+                uriObject = new URL(uri);
+            } catch (err) {}
+            if (!uriObject) return '../?dest=' + encodeURIComponent(uri);
+            if (uriObject.protocol == 'uv:') uriObject.protocol = 'ultraviolet:';
+            if (uriObject.protocol == 'httpsuv:') uriObject.protocol = 'ultraviolet:';
+            if (uriObject.protocol == 'httpuv:') uriObject.protocol = 'ultraviolet:';
+            if (uriObject.protocol == 'uvhttp:') uriObject.protocol = 'ultraviolet:';
+            if (uriObject.protocol == 'uvhttps:') uriObject.protocol = 'ultraviolet:';
+            const path = uriObject.pathname;
+            if (uriObject.protocol == 'tablab:') return './tablab/' + path;
+            if (uriObject.protocol == 'ubgames:') return 'https://ubgames.web.app/' + path;
+            if (uriObject.protocol == 'ultraviolet:') return '../service/' + encodeURIComponent(btoa('https://' + uriObject.hostname + uriObject.pathname));
+            return uri;
+        }
+        function tab (number, element) {
+            disableSetup();
+            if (element?.id) number = +element.id.substring(3);
+            tabs.forEach((tab, i) => {
+                tabs[i].active = false;
+            });
+            tabs[number].active = true;
+            updateTabs();
+            // document.querySelectorAll('.tab').forEach(element => {
+            //     if (element.classList.contains('active')) element.classList.remove('active');
+            // });
+            // document.getElementById("tab" + number).classList.add("active");
+        }
+        function closeTab (number, element) {
+            if (element?.parentElement?.id) number = +element.parentElement.id.substring(3);
+            tabs.splice(number, 1);
+            if (tabs.filter(tab => tab.active).length === 0) {
+                if (tabs.length === 0) {
+                    tabs.push({
+                        title: 'New Tab',
+                        uri: 'tablab://newtab.html',
+                        active: true
+                    });
+                } else if (tabs.length > number) {
+                    tabs[number].active = true;
+                } else {
+                    tabs[tabs.length - 1].active = true;
+                }
+            }
+            updateTabs();
+            // if (document.getElementById("tab" + number).parentElement.children.length === 1) return;
+            // document.getElementById("tab" + number).remove();
+            // document.querySelectorAll('.tab').forEach((element, i) => {
+            //     element.setAttribute('id', 'tab' + i);
+            // });
+        }
+        function openTab () {
+            tabs.push({
+                title: 'New Tab',
+                uri: 'tablab://newtab.html',
+                active: false
+            });
+            tab(tabs.length - 1);
+            updateTabs();
+        }
+        function onKeyPress ({ target, key }) {
+            disableSetup();
+            if (key === 'Enter') {
+                let activeTab = tabs.filter(tab => tab.active)[0];
+                activeTab.uri = target.value;
+                updateTabs();
+                setIframe(activeTab);
+            }
+        }
+        function setIframe (tab) {
+            const iframe = document.getElementById(tab.iframe);
+            iframe.src = uriParser(tab.uri);
+        }
+        if (localStorage.getItem('setup') != "true") doSetup();
+        else closeTab(0);
+        // if (localStorage.getItem('setup') == 'true') {
+        //     setupAllowed = false;
+        //     closeTab(0);
+        // };
+        updateTabs();
+        let expectedUrl;
+        function getFrameLocation () {
+            let url;
+            try {
+                url = new URL(atob(
+                    decodeURIComponent(
+                        document.querySelector('html body div#main div#content iframe')
+                            .contentWindow
+                            .location
+                            .pathname
+                            .split('/').reverse()[0]
+                    )
+                ));
+            } catch (err) {}
+            if (url instanceof URL) return url.href;
+            return undefined;
+        }
+        setInterval(() => {
+            if (expectedUrl != getFrameLocation()) {
+                expectedUrl = getFrameLocation();
+                configureBrandedBar(globalActiveTab);
+            }
+        }, 100);
+    </script>
+</body>
+</html>

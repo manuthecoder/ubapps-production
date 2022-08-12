@@ -1,0 +1,393 @@
+html, body, #main {
+    width: 100vw;
+    height: 100vh;
+    padding: 0px;
+    margin: 0px;
+    border: none;
+    overflow: none;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+#content {
+    height: calc(100vh - 80px);
+    width: 100vw;
+    top: 80px;
+    left: 0px;
+    position: fixed;
+    padding: 0px;
+    margin: 0px;
+    background: rgb(255, 255, 255);
+    border: none;
+}
+
+#content > iframe.active {
+    width: 100%;
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+    border: none;
+    display: block;
+}
+
+#content > iframe {
+    display: none;
+    width: 100%;
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+    border: none;
+}
+
+#nav {
+    height: 80px;
+    position: absolute;
+    top: 0px;
+    background: url("https://ubgo-production.up.railway.app/ubgo/aHR0cHM6Ly9pLnJlZGQuaXQ=/sxz7ho6079p71.jpg"), #2e0188;
+    background-size: cover;
+    background-position: top;
+    padding: 0px;
+    margin: 0px;
+    border: none;
+    left: 0px;
+    width: 100vw;
+}
+
+#tabs {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: space-between left;
+}
+
+#tabs > .tab {
+    height: 34px;
+    background: #ffffff22;
+    padding: 0px;
+    flex: 1 0 0;
+    transition: 0.2s all;
+    text-align: center;
+    max-width: 250px;
+    box-sizing: border-box;
+    margin: 3px;
+    border-radius: 4px;
+    border: 1px solid #ffffff00;
+    position: relative;
+}
+
+#tabs > .open-tab {
+    height: 34px;
+    background: #ffffff11;
+    padding: 0px;
+    flex: 1 0 0;
+    transition: 0.2s all;
+    text-align: center;
+    max-width: 34px;
+    box-sizing: border-box;
+    margin: 3px;
+    border-radius: 4px;
+    border: 1px solid #ffffff00;
+    position: relative;
+}
+
+#tabs > .open-tab:hover {
+    background: #ffffff44;
+}
+
+#tabs > .open-tab > img {
+    pointer-events: none;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#tabs > .tab > span > img {
+    pointer-events: none;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#tabs > .tab:not(:last-child) {
+    margin-right: 0px;
+}
+
+#tabs > .tab.active {
+    background: #ffffff44;
+    border: 1px solid #ffffffcc;
+}
+
+#tabs > .tab:hover {
+    background: #ffffff44;
+}
+
+#tabs > .tab.active:hover {
+    background: #ffffff66;
+}
+
+#tabs > .tab > p {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    display: inline;
+    padding: 0px;
+    margin: 0px;
+    cursor: default;
+    transform: translateY(-50%);
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+#tabs > .tab > span {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline;
+    padding: 0px;
+    margin: 0px;
+    width: 20px;
+    height: 20px;
+    background: #ffffff00;
+    right: 5px;
+    transition: 0.2s all;
+    z-index: 100;
+}
+
+#tabs > .tab:hover > span {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline;
+    padding: 0px;
+    margin: 0px;
+    border-radius: 4px;
+    width: 20px;
+    height: 20px;
+    background: #ffffff00;
+    right: 5px;
+}
+
+#tabs > .tab:only-child:hover > span, #tabs > .tab:only-child:hover > span:hover {
+    background: #ffffff00;
+}
+
+#tabs > .tab:hover > span:hover {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-block;
+    padding: 0px;
+    margin: 0px;
+    border-radius: 4px;
+    width: 20px;
+    height: 20px;
+    background: #ffffff33;
+    right: 5px;
+}
+
+#tabs, #tabs *, #bar > #custom > #service {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+    -webkit-user-drag: none;
+     -khtml-user-drag: none;
+       -moz-user-drag: none;
+         -o-user-drag: none;
+            user-drag: none;
+}
+
+#bar {
+    background: #2e0188;
+    border-bottom: 1px solid #a888ee;
+    height: 40px;
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: space-between left;
+}
+
+#bar > #omnibox {
+    width: calc(100% - 10px);
+    margin: 5px;
+    border-radius: 4px;
+    padding: 4px;
+    outline-color: #a888ee;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background: #c2c2c222;
+    color: #f2ecff;
+    border: none;
+    height: calc(100% - 10px);
+    box-sizing: border-box;
+    transition: 0.2s padding;
+    padding-left: 30px;
+    padding-right: 8px;
+}
+
+#bar > #omnibox::placeholder {
+    color: #caaefd;
+}
+
+#bar > #omnibox:focus-within {
+    width: calc(100% - 10px);
+    outline: none;
+    padding-left: 60px;
+    background: #a888ee66;
+}
+
+#bar > img.first {
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    transform: translateY(-50%);
+    height: 24px;
+}
+
+#bar > img.second {
+    position: absolute;
+    top: 50%;
+    left: 0px;
+    transition: 0.2s all;
+    transform: translateY(-50%);
+    height: 24px;
+    filter: opacity(0%);
+    visibility: hidden;
+}
+
+#bar:focus-within > img.second {
+    visibility: visible;
+    filter: opacity(100%);
+    left: 34px;
+}
+
+#bar > #custom {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    display: none;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    z-index: 10;
+    background-color: #2e0188;
+    justify-content: space-between left;
+}
+
+#bar > #custom.enabled {
+    display: flex;
+}
+
+#bar > #custom > #service {
+    margin: 4px;
+    height: calc(100% - 8px);
+    background-color: #5529a8;
+    border-radius: 4px;
+    position: relative;
+}
+
+#bar > #custom > #path {
+    width: 100%;
+    height: calc( 100% - 8px );
+    margin: 4px;
+    margin-left: 0px;
+    background-color: #5529a8;
+    border-radius: 4px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: white;
+    padding: 6px;
+}
+
+#bar > #custom > #service > img {
+    position: absolute;
+    top: 50%;
+    pointer-events: none;
+    left: 6px;
+    transform: translateY(-50%);
+    height: 24px;
+}
+
+#bar > #custom > #service > p {
+    position: absolute;
+    top: 57%;
+    left: 36px;
+    padding: 0px;
+    margin: 0px;
+    transform: translateY(-50%);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: white;
+    height: 24px;
+}
+
+#bar > #custom > #service > b {
+    margin-left: 36px!important;
+    margin-right: 10px!important;
+    font-weight: normal;
+    color: #ffffff00;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    height: 34px;
+    margin: 0px;
+    padding: 0px;
+}
+
+#bar > #custom.placeholder > #path {
+    color: #caaefd;
+}
+
+#bar > #custom.editable > #path {
+    cursor: text;
+}
+
+body #setup {
+    display: none;
+}
+
+body.setup #setup {
+    display: block;
+    position: absolute;
+    bottom: 10px;
+    max-width: 400px;
+    width: calc( 100vw - 100px );
+    line-height: 1.5;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #5529a8;
+    color: white;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+body.setup #setup button {
+    border: 2px solid white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #5529a8;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: 0.3s all;
+}
+
+body.setup #setup button:hover {
+    border: 2px solid white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: white;
+    color: #5529a8;
+    font-weight: bold;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 8px;
+}
