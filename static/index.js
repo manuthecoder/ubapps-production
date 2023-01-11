@@ -6,6 +6,8 @@ const params = new Proxy(new URLSearchParams(window.location.search), {
 });
 let url = params.dest;
 url = url.replace(/\|/g, '');
+url = decodeURIComponent(url);
+
 if (url) {
     const newDiv = document.createElement("div");
     document.body.appendChild(newDiv, document.body);
