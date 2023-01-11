@@ -30,7 +30,7 @@ if (url) {
   <div class="animate-announcement"></div>
             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 0px; margin: 0px; z-index: 20000">
                 <center style="font-size:30px">
-                    <p>Synthesizing <span id="url" style="font-weight: bold;">%s</span></p>
+                    <p>Synthesizing <u id="url" style="font-weight: bold;">%s</u></p>
                 </center>
             </div>
 
