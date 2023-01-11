@@ -26,23 +26,15 @@ if (url) {
         fontWeight: 'bold'
     };
     newDiv.innerHTML = /*html*/`
-        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 0px; margin: 0px; width: 100vw; height: 100vh; background-color: white!important; z-index: 10000;">
+        <div class="synth">
+  <div class="animate-announcement"></div>
             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 0px; margin: 0px; z-index: 20000">
                 <center>
-                   <svg width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                      <g>
-                        <animateTransform attributeName="transform" type="rotate" values="0 33 33;270 33 33" begin="0s" dur="1.4s" fill="freeze" repeatCount="indefinite"/>
-                        <circle fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30" stroke-dasharray="187" stroke-dashoffset="610">
-                          <animate attributeName="stroke" values="#4285F4;#DE3E35;#F7C223;#1B9A59;#4285F4" begin="0s" dur="5.6s" fill="freeze" repeatCount="indefinite"/>
-                          <animateTransform attributeName="transform" type="rotate" values="0 33 33;135 33 33;450 33 33" begin="0s" dur="1.4s" fill="freeze" repeatCount="indefinite"/>
-                          <animate attributeName="stroke-dashoffset" values="187;46.75;187" begin="0s" dur="1.4s" fill="freeze" repeatCount="indefinite"/>
-                        </circle>
-                       </g>
-                    </svg>
                     <p>Synthesizing <span id="url" style="font-weight: bold;">%s</span></p>
                 </center>
             </div>
-        </div>
+
+</div>
     `;
     document.getElementById('url').innerText = url;
     setTimeout(() => {
