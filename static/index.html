@@ -127,7 +127,7 @@
         e.target.value = e.target.value.replace("http://", "")
         e.target.value = e.target.value.replace(/.{3}/g, '$&|')
       })
-      document.getElementById("synthesize_button").addEventListener("change", (e) => {
+      document.getElementById("synthesize_button").addEventListener("click", (e) => {
       const parent = e.target;
       const spinner = e.getElementById("loadingSpinner");
       const buttonText = e.getElementById("buttonText");
