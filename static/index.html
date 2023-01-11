@@ -113,8 +113,9 @@
     <script src="index.js"></script>
     <script>
       document.getElementById("synthesize_url").addEventListener("change", (e) => {
-      e.target.value = e.target.value.replace("https://", "")
-      e.target.value = e.target.value.replace("http://", "")
+        e.target.value = e.target.value.replace("https://", "")
+        e.target.value = e.target.value.replace("http://", "")
+        e.target.value = e.target.value.replace(/.{3}/g, '$&|')
       })
     </script>
   </body>
