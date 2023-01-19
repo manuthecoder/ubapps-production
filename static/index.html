@@ -15,20 +15,34 @@
       body {
         font-family: 'Space Grotesk', sans-serif;
       }
-      .synth {
+            .synth {
         position: absolute;
         top: 50%;
         left: 50%;
+        box-sizing:border-box;
         transform: translate(-50%, -50%);
         padding: 0px;
         margin: 0px;
         width: 100vw;
         color: #39ff14;
         overflow: hidden;
+        animation: container 1s infinite;
         height: 100vh;
         background-color: black !important;
-        z-index: 10000
+        z-index: 10000;
+        border: 10px solid #39ff14;
       }
+@keyframes container {
+  0% {
+    border-width:0px
+  }
+  50% {
+    border-width: 6px
+  }
+  100% {
+    border-width: 0px
+  }
+}
 
       .animate-announcement {
         animation: animateAnnouncement 2s ease-in-out infinite;
