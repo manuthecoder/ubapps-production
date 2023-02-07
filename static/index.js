@@ -5,7 +5,7 @@ const params = new Proxy(new URLSearchParams(window.location.search), {
   get: (searchParams, prop) => searchParams.get(prop),
 });
 let url = params.dest;
-url = url.replace(/\|/g, '');
+url = url.replaceAll(/\|/g, '');
 url = decodeURIComponent(url);
 
 if (url) {
